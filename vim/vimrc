@@ -1,0 +1,101 @@
+" vim settings for kernel development
+set number				" display line number
+set nocompatible                        " vim defaults, not vi!
+filetype on                             " automatic file type detection
+set noexpandtab                         " tabs are tabs and not spaces
+set tabstop=8                           " tabstops of 8
+set shiftwidth=8                        " indents of 8
+set textwidth=78                        " screen in 80 columns wide, wrap at 78
+set autoindent smartindent              " turn on auto/smart indenting
+set smarttab                            " make <tab> and <backspace> smarter
+set backspace=eol,start,indent          " allow backspacing over indent, eol, & start
+set backspace=2
+set hlsearch
+set incsearch
+filetype plugin indent on
+nmap <C-J> vip=                         " forces (re)indentation of a block of code
+syntax on                               " enable syntax highlighting
+" highligh kernel types
+syn keyword cType uint ubyte ulong uint64_t uint32_t uint16_t uint8_t boolean_t int64_t 
+syn keyword cType int32_t int16_t int8_t u_int64_t u_int32_t u_int16_t u_int8_t
+syn keyword cOperator likely unlikely
+
+set formatoptions=tcqlron		" automatically add comment leaders
+set cinoptions=:0,l1,t0,g0		" handle C indention
+
+" Misc settings
+set history=50
+set guifont=Courier\ 14
+let g:explSplitRight=1  " Put new window to the right of the explorer
+let g:explStartRight=0  " new windows go to right of explorer window
+colorscheme desert	" Better one for eyes
+set cino=(0
+
+au BufEnter Makefile set noet
+au BufEnter *.mk set noet
+set wildmode=longest,list,full
+set wildmenu
+
+if has("cscope")
+
+    """"""""""""" Standard cscope/vim boilerplate
+
+    " use both cscope and ctag for 'ctrl-]', ':ta', and 'vim -t'
+    set cscopetag
+
+    " check cscope for definition of a symbol before checking ctags: set to 1
+    " if you want the reverse search order.
+    set csto=0
+
+    " add any cscope database in current directory
+    if filereadable("cscope.out")
+        cs add cscope.out  
+    " else add the database pointed to by environment variable 
+    elseif $CSCOPE_DB != ""
+        cs add $CSCOPE_DB
+    endif
+
+    " show msg when any other cscope db added
+    set nocscopeverbose  
+
+
+    " The following maps all invoke one of the following cscope search types:
+    "
+    "   's'   symbol: find all references to the token under cursor
+    "   'g'   global: find global definition(s) of the token under cursor
+    "   'c'   calls:  find all calls to the function name under cursor
+    "   't'   text:   find all instances of the text under cursor
+    "   'e'   egrep:  egrep search for the word under cursor
+    "   'f'   file:   open the filename under cursor
+    "   'i'   includes: find files that include the filename under cursor
+    "   'd'   called: find functions that function under cursor calls
+    "
+    " To do the first type of search, hit 'CTRL-\', followed by one of the
+    " cscope search types rightbve (s,g,c,t,e,f,i,d).  The result of your cscope
+    " search will be displayed in the current window.  You can use CTRL-T to
+    " go back to where you were before the search.  
+    "
+
+    nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>	
+    nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>	
+    nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>	
+    nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>	
+    nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>	
+    nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>	
+    nmap <C-\>i :cs find i <C-R>^=expand("<cfile>")<CR>$<CR>
+    nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+
+endif
+
+" Open and close all the three plugins on the same time
+ nmap <F8> :TrinityToggleAll
+
+" " Open and close the srcexpl.vim separately
+ nmap <F9>   :TrinityToggleSourceExplorer
+
+" " Open and close the taglist.vim separately
+ nmap <F10>  :TrinityToggleTagList
+
+" " Open and close the NERD_tree.vim separately
+ nmap <F12> :TrinityToggleNERDTree
+
